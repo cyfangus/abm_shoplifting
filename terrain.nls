@@ -1,0 +1,109 @@
+;this code is for setting the terrain
+to create_supermarket
+  
+  set_colour_patches
+  
+  add_patches
+  
+end
+  
+;ex1.2.2
+to set_colour_patches
+  
+  set colour_background 0
+  set colour_aisles 139
+  set colour_shelves 76
+  set colour_entrance Blue
+  set colour_exit Green
+  set colour_outside Yellow
+  set colour_intersection Pink
+  
+end
+
+;ex1.2.7
+to  add_patches
+  
+  file-close-all
+  
+   If not file-exists? "SupermarketTerrain.csv"
+  [
+    user-message "file does not exist"
+    Stop
+  ]
+  
+  file-open "SupermarketTerrain.csv"
+
+  let index 0
+  
+  while [ not file-at-end? ]
+ [
+    let data csv:from-row file-read-line
+
+    if index != 0
+    
+    [ask patches with [pxcor = item 0 data and pycor = item 1 data]
+      [
+      if item 2 data = "B" [set category "background"]
+      if item 2 data = "A" [set category "aisles"]
+      if item 2 data = "S" [set category "shelves"]
+      if item 2 data = "E" [set category "entrance"]
+      if item 2 data = "X" [set category "exit"]
+      if item 2 data = "O" [set category "outside"]
+      if item 2 data = "I" [set category "intersection"]
+      ]
+    ]
+    set index index + 1
+  ]
+  
+  file-close
+    
+  ask patches with [category = "background"] [set pcolor colour_background]
+  ask patches with [category = "aisles"] [set pcolor colour_aisles]
+  ask patches with [category = "shelves"] [set pcolor colour_shelves]
+  ask patches with [category = "entrance"] [set pcolor colour_entrance]
+  ask patches with [category = "exit"] [set pcolor colour_exit]
+  ask patches with [category = "outside"] [set pcolor colour_outside]
+  ask patches with [category = "intersection"] [set pcolor colour_intersection]
+  
+end
+
+to proportion_patches
+  
+  let N_background count patches with [category = "background"]
+  let N_aisles count patches with [category = "aisles"]
+  let N_shelves count patches with [category = "shelves"]
+  let N_entrance count patches with [category = "entrance"]
+  let N_exit count patches with [category = "exit"]
+  let N_outside count patches with [category = "outside"]
+  let N_intersection count patches with [category = "intersection"]
+  
+  let N_total (N_background + N_aisles + N_shelves + N_entrance + N_exit + N_outside + N_intersection)
+  
+  let background% ( N_background / N_total ) * 100 
+  let aisles% ( N_aisles / N_total ) * 100
+  let shelves% ( N_shelves / N_total ) * 100
+  let entrance% ( N_entrance / N_total ) * 100
+  let exit% ( N_exit / N_total ) * 100
+  let outside% ( N_outside / N_total ) * 100
+  let intersection% ( N_intersection / N_total ) * 100
+  
+  
+  show "proportion of background"
+  show precision background% 2
+  show "proportion of aisles"
+  show precision aisles% 2
+  show "proportion of shelves"
+  show precision shelves% 2
+  show "proportion of entrance"
+  show precision entrance% 2
+  show "proportion of exit"
+  show precision exit% 2
+  show "proportion of outside"
+  show precision outside% 2
+  show "proportion of intersection"
+  show precision intersection% 2
+  
+end
+  
+  
+  
