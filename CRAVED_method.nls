@@ -1,0 +1,43 @@
+to add_products
+  
+  assign_CRAVED
+  
+end
+
+to assign_CRAVED
+  
+  ask patches [ set CRAVED [] ]
+  
+  file-close-all
+  
+   If not file-exists? "supermarketCraved.csv"
+  [
+    user-message "file does not exist"
+    Stop
+  ]
+  
+  file-open "supermarketCraved.csv"
+
+  let index 0
+  
+  while [ not file-at-end? ]
+ [
+    let data csv:from-row file-read-line
+    
+    if (index != 0)
+    
+    [ask patches with [ pxcor = item 0 data and pycor = item 1 data and category = "shelves" ]
+      [ set CRAVED lput (list item 2 data item 3 data item 4 data item 5 data item 6 data item 7 data) CRAVED ; set CRAVED list
+        
+        set CRAVED_score ( item 2 data + item 3 data + item 4 data + item 5 data + item 6 data + item 7 data ) ; set CRAVED score
+      
+        set pcolor scale-color red CRAVED_score 0 54 ]
+      
+    ]
+    set index ( index + 1 )
+  ]
+  
+  file-close
+  
+end
+
